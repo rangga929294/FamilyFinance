@@ -1,0 +1,4670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PUNDIKU — Akuntansi Keuangan Keluarga</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        /* =========================
+           LOGIN
+        ========================== */
+
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.25);
+        }
+
+        .login-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+        }
+
+        .btn-login {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            background: #1d4ed8;
+        }
+
+        .login-error {
+            color: #dc2626;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        .demo-info {
+            margin-top: 20px;
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 12px;
+            color: #1e40af;
+        }
+
+        /* =========================
+           APP
+        ========================== */
+
+        #app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            width: 260px;
+            background: #0f172a;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .brand h2 {
+            font-size: 22px;
+            letter-spacing: .5px;
+        }
+
+        .brand span {
+            color: #60a5fa;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 6px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .nav {
+            padding: 18px 12px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: none;
+            background: transparent;
+            color: #cbd5e1;
+            padding: 13px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,.07);
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .nav-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 18px;
+            color: #64748b;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .main {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar h3 {
+            color: #111827;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .page-title {
+            margin-bottom: 22px;
+        }
+
+        .page-title h1 {
+            font-size: 26px;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* =========================
+           CARDS
+        ========================== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 10px rgba(15,23,42,.04);
+        }
+
+        .card-label {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .card-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            margin-bottom: 12px;
+        }
+
+        /* =========================
+           GRID
+        ========================== */
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .panel-header h3 {
+            font-size: 17px;
+            color: #111827;
+        }
+
+        .panel-header p {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* =========================
+           BUTTON
+        ========================== */
+
+        .btn {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* =========================
+           FORM GRID
+        ========================== */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           TABLE
+        ========================== */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            text-align: left;
+            font-size: 12px;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-income {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-expense {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-small {
+            border: none;
+            padding: 6px 8px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        /* =========================
+           CHART
+        ========================== */
+
+        .chart {
+            height: 260px;
+            display: flex;
+            align-items: flex-end;
+            gap: 18px;
+            padding: 20px 10px 10px;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bar {
+            width: 65%;
+            min-height: 8px;
+            border-radius: 7px 7px 0 0;
+            background: #2563eb;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* =========================
+           PROGRESS
+        ========================== */
+
+        .progress-wrapper {
+            margin-top: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .progress-track {
+            height: 13px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #2563eb;
+            border-radius: 20px;
+            transition: width .3s ease;
+        }
+
+        /* =========================
+           EMPTY
+        ========================== */
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #94a3b8;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media(max-width: 1100px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 800px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .brand {
+                padding: 18px 8px;
+                text-align: center;
+            }
+
+            .brand h2 {
+                font-size: 15px;
+            }
+
+            .brand small {
+                display: none;
+            }
+
+            .nav-btn {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .nav-btn span:not(.nav-icon) {
+                display: none;
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid .full {
+                grid-column: auto;
+            }
+
+            .page-title h1 {
+                font-size: 22px;
+            }
+
+            .topbar h3 {
+                font-size: 14px;
+            }
+
+            .user-info span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<div id="loginPage">
+
+    <div class="login-card">
+
+        <div class="login-logo">P</div>
+
+        <h1>PUNDIKU</h1>
+
+        <p>Akuntansi Keuangan Keluarga</p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label>Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Masukkan username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan password"
+                    required
+                >
+            </div>
+
+            <button class="btn-login" type="submit">
+                MASUK
+            </button>
+
+            <div id="loginError" class="login-error"></div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     APPLICATION
+========================================================= -->
+
+<div id="app">
+
+    <div class="layout">
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <h2>PUNDI<span>KU</span></h2>
+                <small>Akuntansi Keuangan Keluarga</small>
+            </div>
+
+            <nav class="nav">
+
+                <button class="nav-btn active" data-page="dashboard">
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </button>
+
+                <button class="nav-btn" data-page="transaksi">
+                    <span class="nav-icon">💳</span>
+                    <span>Transaksi</span>
+                </button>
+
+                <button class="nav-btn" data-page="dana-operasional">
+                    <span class="nav-icon">💰</span>
+                    <span>Dana Operasional</span>
+                </button>
+
+                <button class="nav-btn" data-page="dana-sekolah">
+                    <span class="nav-icon">🎓</span>
+                    <span>Dana Sekolah</span>
+                </button>
+
+                <button class="nav-btn" data-page="dana-darurat">
+                    <span class="nav-icon">🚨</span>
+                    <span>Dana Darurat</span>
+                </button>
+
+                <button class="nav-btn" data-page="aset">
+                    <span class="nav-icon">🏠</span>
+                    <span>Aset</span>
+                </button>
+
+                <button class="nav-btn" data-page="investasi">
+                    <span class="nav-icon">📈</span>
+                    <span>Investasi</span>
+                </button>
+
+                <button class="nav-btn" data-page="laporan">
+                    <span class="nav-icon">📊</span>
+                    <span>Laporan</span>
+                </button>
+
+                <button class="nav-btn" id="logoutBtn">
+                    <span class="nav-icon">🚪</span>
+                    <span>Keluar</span>
+                </button>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                PUNDIKU Prototype v2.0
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN
+        ================================================== -->
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <h3 id="topbarTitle">
+                    Dashboard
+                </h3>
+
+                <div class="user-info">
+                    <div class="avatar">D</div>
+                    <span>Keluarga</span>
+                </div>
+
+            </header>
+
+
+            <div class="content">
+
+
+                <!-- =================================================
+                     DASHBOARD
+                ================================================== -->
+
+                <section
+                    id="dashboard"
+                    class="page-section active"
+                >
+
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                        <p>
+                            Ringkasan kondisi keuangan keluarga.
+                        </p>
+                    </div>
+
+
+                    <div class="cards">
+
+                        <div class="card">
+                            <div class="card-icon">💵</div>
+                            <div class="card-label">
+                                Total Pendapatan
+                            </div>
+                            <div class="card-value">
+                                Rp 11.000.000
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">💸</div>
+                            <div class="card-label">
+                                Total Pengeluaran
+                            </div>
+                            <div class="card-value">
+                                Rp 6.500.000
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">🏠</div>
+                            <div class="card-label">
+                                Total Aset
+                            </div>
+                            <div class="card-value">
+                                Rp 150.000.000
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-label">
+                                Total Investasi
+                            </div>
+                            <div class="card-value">
+                                Rp 35.000.000
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="grid-2">
+
+                        <div class="panel">
+
+                            <div class="panel-header">
+
+                                <div>
+                                    <h3>Arus Keuangan 6 Bulan</h3>
+                                    <p>Visualisasi sederhana</p>
+                                </div>
+
+                            </div>
+
+                            <div class="chart">
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:45%"
+                                    ></div>
+                                    <span class="bar-label">Apr</span>
+                                </div>
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:60%"
+                                    ></div>
+                                    <span class="bar-label">Mei</span>
+                                </div>
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:55%"
+                                    ></div>
+                                    <span class="bar-label">Jun</span>
+                                </div>
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:70%"
+                                    ></div>
+                                    <span class="bar-label">Jul</span>
+                                </div>
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:80%"
+                                    ></div>
+                                    <span class="bar-label">Agu</span>
+                                </div>
+
+                                <div class="bar-container">
+                                    <div
+                                        class="bar"
+                                        style="height:90%"
+                                    ></div>
+                                    <span class="bar-label">Sep</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="panel">
+
+                            <div class="panel-header">
+
+                                <div>
+                                    <h3>Ringkasan Keuangan</h3>
+                                </div>
+
+                            </div>
+
+                            <p style="margin-bottom:12px;">
+                                Pendapatan
+                                <strong style="float:right;">
+                                    Rp 11.000.000
+                                </strong>
+                            </p>
+
+                            <p style="margin-bottom:12px;">
+                                Pengeluaran
+                                <strong style="float:right;">
+                                    Rp 6.500.000
+                                </strong>
+                            </p>
+
+                            <p style="margin-bottom:12px;">
+                                Sisa Dana
+                                <strong style="float:right;">
+                                    Rp 4.500.000
+                                </strong>
+                            </p>
+
+                            <hr style="border:none;border-top:1px solid #e5e7eb;margin:18px 0;">
+
+                            <p>
+                                Kondisi Keuangan
+                                <span
+                                    class="badge badge-income"
+                                    style="float:right;"
+                                >
+                                    Positif
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Transaksi Terbaru</h3>
+                            </div>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="showPage('transaksi')"
+                            >
+                                Lihat Semua
+                            </button>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Nominal</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+                                        <td>10/09/2026</td>
+                                        <td>Gaji Bulanan</td>
+                                        <td>Pendapatan</td>
+                                        <td>
+                                            <span class="badge badge-income">
+                                                Pemasukan
+                                            </span>
+                                        </td>
+                                        <td>Rp 11.000.000</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>11/09/2026</td>
+                                        <td>Belanja Rumah</td>
+                                        <td>Kebutuhan</td>
+                                        <td>
+                                            <span class="badge badge-expense">
+                                                Pengeluaran
+                                            </span>
+                                        </td>
+                                        <td>Rp 2.000.000</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     TRANSAKSI
+                ================================================== -->
+
+                <section
+                    id="transaksi"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+                        <h1>Transaksi</h1>
+                        <p>
+                            Catat seluruh pemasukan dan pengeluaran keluarga.
+                        </p>
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h3>Tambah Transaksi</h3>
+                            </div>
+                        </div>
+
+                        <form id="transactionForm">
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+                                    <label>Tanggal</label>
+                                    <input
+                                        type="date"
+                                        id="transactionDate"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Jenis</label>
+
+                                    <select
+                                        id="transactionType"
+                                        required
+                                    >
+                                        <option value="income">
+                                            Pemasukan
+                                        </option>
+
+                                        <option value="expense">
+                                            Pengeluaran
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Keterangan</label>
+
+                                    <input
+                                        type="text"
+                                        id="transactionDescription"
+                                        placeholder="Contoh: Gaji bulanan"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Nominal</label>
+
+                                    <input
+                                        type="number"
+                                        id="transactionAmount"
+                                        min="0"
+                                        placeholder="0"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Kategori</label>
+
+                                    <select id="transactionCategory">
+
+                                        <option>
+                                            Pendapatan
+                                        </option>
+
+                                        <option>
+                                            Kebutuhan Rumah
+                                        </option>
+
+                                        <option>
+                                            Makanan
+                                        </option>
+
+                                        <option>
+                                            Transportasi
+                                        </option>
+
+                                        <option>
+                                            Pendidikan
+                                        </option>
+
+                                        <option>
+                                            Kesehatan
+                                        </option>
+
+                                        <option>
+                                            Hiburan
+                                        </option>
+
+                                        <option>
+                                            Lainnya
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+                                        + Simpan Transaksi
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Daftar Transaksi</h3>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Nominal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="transactionTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     DANA OPERASIONAL
+                ================================================== -->
+
+                <section
+                    id="dana-operasional"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+                        <h1>Dana Operasional</h1>
+                        <p>
+                            Pengelolaan dana kebutuhan operasional keluarga.
+                        </p>
+                    </div>
+
+
+                    <div class="cards">
+
+                        <div class="card">
+                            <div class="card-icon">💰</div>
+                            <div class="card-label">
+                                Saldo Awal
+                            </div>
+                            <div
+                                class="card-value"
+                                id="operationalInitial"
+                            >
+                                Rp 25.000.000
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">📥</div>
+                            <div class="card-label">
+                                Dana Masuk
+                            </div>
+                            <div
+                                class="card-value"
+                                id="operationalIncome"
+                            >
+                                Rp 0
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">💸</div>
+                            <div class="card-label">
+                                Dana Digunakan
+                            </div>
+                            <div
+                                class="card-value"
+                                id="operationalExpense"
+                            >
+                                Rp 4.000.000
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon">💵</div>
+                            <div class="card-label">
+                                Sisa Dana
+                            </div>
+                            <div
+                                class="card-value"
+                                id="operationalBalance"
+                            >
+                                Rp 21.000.000
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Tambah Dana Operasional</h3>
+                        </div>
+
+                        <form id="operationalForm">
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+                                    <label>Tanggal</label>
+
+                                    <input
+                                        type="date"
+                                        id="operationalDate"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>Jenis</label>
+
+                                    <select
+                                        id="operationalType"
+                                        required
+                                    >
+
+                                        <option value="expense">
+                                            Pengeluaran
+                                        </option>
+
+                                        <option value="income">
+                                            Dana Masuk
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>Keterangan</label>
+
+                                    <input
+                                        type="text"
+                                        id="operationalDescription"
+                                        placeholder="Contoh: Belanja bulanan"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>Nominal</label>
+
+                                    <input
+                                        type="number"
+                                        id="operationalAmount"
+                                        min="0"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>Kategori</label>
+
+                                    <select id="operationalCategory">
+
+                                        <option>
+                                            Kebutuhan Rumah
+                                        </option>
+
+                                        <option>
+                                            Makanan
+                                        </option>
+
+                                        <option>
+                                            Transportasi
+                                        </option>
+
+                                        <option>
+                                            Tagihan
+                                        </option>
+
+                                        <option>
+                                            Kesehatan
+                                        </option>
+
+                                        <option>
+                                            Lainnya
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>&nbsp;</label>
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+                                        + Simpan
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Riwayat Dana Operasional</h3>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Nominal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="operationalTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     DANA SEKOLAH
+                ================================================== -->
+
+                <section
+                    id="dana-sekolah"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+
+                        <h1>Dana Sekolah</h1>
+
+                        <p>
+                            Kelola dana pendidikan dan kebutuhan sekolah anak.
+                        </p>
+
+                    </div>
+
+
+                    <div class="cards">
+
+                        <div class="card">
+
+                            <div class="card-icon">🎓</div>
+
+                            <div class="card-label">
+                                Saldo Dana Sekolah
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="schoolBalance"
+                            >
+                                Rp 7.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">📥</div>
+
+                            <div class="card-label">
+                                Dana Masuk
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="schoolIncome"
+                            >
+                                Rp 0
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">📚</div>
+
+                            <div class="card-label">
+                                Dana Digunakan
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="schoolExpense"
+                            >
+                                Rp 3.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">🏫</div>
+
+                            <div class="card-label">
+                                Anggaran Awal
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="schoolInitial"
+                            >
+                                Rp 10.000.000
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Tambah Dana Sekolah</h3>
+
+                                <p>
+                                    Catat pemasukan atau penggunaan dana pendidikan.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <form id="schoolForm">
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>Tanggal</label>
+
+                                    <input
+                                        type="date"
+                                        id="schoolDate"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Jenis</label>
+
+                                    <select
+                                        id="schoolType"
+                                        required
+                                    >
+
+                                        <option value="expense">
+                                            Pengeluaran
+                                        </option>
+
+                                        <option value="income">
+                                            Dana Masuk
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Keperluan</label>
+
+                                    <input
+                                        type="text"
+                                        id="schoolDescription"
+                                        placeholder="Contoh: Pembayaran SPP"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Nominal</label>
+
+                                    <input
+                                        type="number"
+                                        id="schoolAmount"
+                                        min="0"
+                                        placeholder="0"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Kategori</label>
+
+                                    <select id="schoolCategory">
+
+                                        <option>
+                                            SPP
+                                        </option>
+
+                                        <option>
+                                            Buku Pelajaran
+                                        </option>
+
+                                        <option>
+                                            Seragam
+                                        </option>
+
+                                        <option>
+                                            Uang Saku
+                                        </option>
+
+                                        <option>
+                                            Transportasi
+                                        </option>
+
+                                        <option>
+                                            Kegiatan Sekolah
+                                        </option>
+
+                                        <option>
+                                            Perlengkapan Sekolah
+                                        </option>
+
+                                        <option>
+                                            Les / Kursus
+                                        </option>
+
+                                        <option>
+                                            Lainnya
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Status</label>
+
+                                    <select id="schoolStatus">
+
+                                        <option>
+                                            Direncanakan
+                                        </option>
+
+                                        <option>
+                                            Sudah Dibayar
+                                        </option>
+
+                                        <option>
+                                            Selesai
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group full">
+
+                                    <div class="form-actions">
+
+                                        <button
+                                            class="btn btn-primary"
+                                            type="submit"
+                                        >
+                                            + Simpan Dana Sekolah
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            id="schoolCancelEdit"
+                                            style="display:none;"
+                                        >
+                                            Batal Edit
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h3>Riwayat Dana Sekolah</h3>
+
+                                <p>
+                                    Semua transaksi khusus kebutuhan pendidikan.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Keperluan</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Status</th>
+                                        <th>Nominal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="schoolTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     DANA DARURAT
+                ================================================== -->
+
+                <section
+                    id="dana-darurat"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+
+                        <h1>Dana Darurat</h1>
+
+                        <p>
+                            Kelola tabungan khusus untuk menghadapi keadaan tidak terduga.
+                        </p>
+
+                    </div>
+
+
+                    <div class="cards">
+
+                        <div class="card">
+
+                            <div class="card-icon">🎯</div>
+
+                            <div class="card-label">
+                                Target Dana Darurat
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="emergencyTarget"
+                            >
+                                Rp 50.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">🛡️</div>
+
+                            <div class="card-label">
+                                Dana Terkumpul
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="emergencyBalance"
+                            >
+                                Rp 4.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">🚑</div>
+
+                            <div class="card-label">
+                                Dana Digunakan
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="emergencyExpense"
+                            >
+                                Rp 1.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">📊</div>
+
+                            <div class="card-label">
+                                Kekurangan Target
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="emergencyRemaining"
+                            >
+                                Rp 46.000.000
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h3>Progress Dana Darurat</h3>
+
+                                <p>
+                                    Target default Rp 50 juta.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-wrapper">
+
+                            <div class="progress-header">
+
+                                <span>
+                                    Progress Target
+                                </span>
+
+                                <strong id="emergencyProgressText">
+                                    8%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress-track">
+
+                                <div
+                                    class="progress-bar"
+                                    id="emergencyProgressBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h3>Tambah Dana Darurat</h3>
+
+                                <p>
+                                    Catat setoran atau penggunaan dana darurat.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <form id="emergencyForm">
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>Tanggal</label>
+
+                                    <input
+                                        type="date"
+                                        id="emergencyDate"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Jenis</label>
+
+                                    <select
+                                        id="emergencyType"
+                                        required
+                                    >
+
+                                        <option value="income">
+                                            Setoran Dana Darurat
+                                        </option>
+
+                                        <option value="expense">
+                                            Penggunaan Dana Darurat
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Keterangan</label>
+
+                                    <input
+                                        type="text"
+                                        id="emergencyDescription"
+                                        placeholder="Contoh: Setoran dana darurat"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Nominal</label>
+
+                                    <input
+                                        type="number"
+                                        id="emergencyAmount"
+                                        min="0"
+                                        placeholder="0"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Kategori</label>
+
+                                    <select id="emergencyCategory">
+
+                                        <option>
+                                            Setoran Dana Darurat
+                                        </option>
+
+                                        <option>
+                                            Kesehatan
+                                        </option>
+
+                                        <option>
+                                            Perbaikan Rumah
+                                        </option>
+
+                                        <option>
+                                            Perbaikan Kendaraan
+                                        </option>
+
+                                        <option>
+                                            Kehilangan Pendapatan
+                                        </option>
+
+                                        <option>
+                                            Keadaan Mendesak
+                                        </option>
+
+                                        <option>
+                                            Lainnya
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Status</label>
+
+                                    <select id="emergencyStatus">
+
+                                        <option>
+                                            Berhasil
+                                        </option>
+
+                                        <option>
+                                            Diproses
+                                        </option>
+
+                                        <option>
+                                            Direncanakan
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group full">
+
+                                    <div class="form-actions">
+
+                                        <button
+                                            class="btn btn-primary"
+                                            type="submit"
+                                        >
+                                            + Simpan Dana Darurat
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            id="emergencyCancelEdit"
+                                            style="display:none;"
+                                        >
+                                            Batal Edit
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h3>Riwayat Dana Darurat</h3>
+
+                                <p>
+                                    Catatan seluruh setoran dan penggunaan dana darurat.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th>Kategori</th>
+                                        <th>Jenis</th>
+                                        <th>Status</th>
+                                        <th>Nominal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="emergencyTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     ASET
+                ================================================== -->
+
+                <section
+                    id="aset"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+
+                        <h1>Aset</h1>
+
+                        <p>
+                            Kelola daftar aset keluarga.
+                        </p>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Tambah Aset</h3>
+                        </div>
+
+                        <form id="assetForm">
+
+                            <input
+                                type="hidden"
+                                id="assetId"
+                            >
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>Nama Aset</label>
+
+                                    <input
+                                        type="text"
+                                        id="assetName"
+                                        placeholder="Contoh: Rumah"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Nilai Aset</label>
+
+                                    <input
+                                        type="number"
+                                        id="assetValue"
+                                        min="0"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Kategori</label>
+
+                                    <select id="assetCategory">
+
+                                        <option>
+                                            Properti
+                                        </option>
+
+                                        <option>
+                                            Kendaraan
+                                        </option>
+
+                                        <option>
+                                            Tabungan
+                                        </option>
+
+                                        <option>
+                                            Barang
+                                        </option>
+
+                                        <option>
+                                            Lainnya
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>&nbsp;</label>
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+                                        + Simpan Aset
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Daftar Aset</h3>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Nama Aset</th>
+                                        <th>Kategori</th>
+                                        <th>Nilai</th>
+                                        <th>Aksi</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="assetTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     INVESTASI
+                ================================================== -->
+
+                <section
+                    id="investasi"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+
+                        <h1>Investasi</h1>
+
+                        <p>
+                            Kelola portofolio investasi keluarga.
+                        </p>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Tambah Investasi</h3>
+                        </div>
+
+                        <form id="investmentForm">
+
+                            <input
+                                type="hidden"
+                                id="investmentId"
+                            >
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>Instrumen</label>
+
+                                    <input
+                                        type="text"
+                                        id="investmentName"
+                                        placeholder="Contoh: Reksa Dana"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Modal</label>
+
+                                    <input
+                                        type="number"
+                                        id="investmentCapital"
+                                        min="0"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>Estimasi Imbal Hasil (%)</label>
+
+                                    <input
+                                        type="number"
+                                        id="investmentProfit"
+                                        step="0.01"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>&nbsp;</label>
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+                                        + Simpan Investasi
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <h3>Portofolio Investasi</h3>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Instrumen</th>
+                                        <th>Modal</th>
+                                        <th>Imbal Hasil</th>
+                                        <th>Estimasi Nilai</th>
+                                        <th>Aksi</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="investmentTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     LAPORAN
+                ================================================== -->
+
+                <section
+                    id="laporan"
+                    class="page-section"
+                >
+
+                    <div class="page-title">
+
+                        <h1>Laporan</h1>
+
+                        <p>
+                            Ringkasan laporan keuangan keluarga.
+                        </p>
+
+                    </div>
+
+
+                    <div class="cards">
+
+                        <div class="card">
+
+                            <div class="card-icon">💵</div>
+
+                            <div class="card-label">
+                                Pendapatan
+                            </div>
+
+                            <div class="card-value">
+                                Rp 11.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">💸</div>
+
+                            <div class="card-label">
+                                Pengeluaran
+                            </div>
+
+                            <div class="card-value">
+                                Rp 6.500.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">🎓</div>
+
+                            <div class="card-label">
+                                Dana Sekolah
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="reportSchool"
+                            >
+                                Rp 7.000.000
+                            </div>
+
+                        </div>
+
+
+                        <div class="card">
+
+                            <div class="card-icon">🚨</div>
+
+                            <div class="card-label">
+                                Dana Darurat
+                            </div>
+
+                            <div
+                                class="card-value"
+                                id="reportEmergency"
+                            >
+                                Rp 4.000.000
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <h3>
+                                    Laporan Keuangan Keluarga
+                                </h3>
+
+                                <p>
+                                    PUNDIKU — Akuntansi Keuangan Keluarga
+                                </p>
+
+                            </div>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="window.print()"
+                            >
+                                🖨 Cetak / PDF
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                line-height:2;
+                                color:#475569;
+                            "
+                        >
+
+                            <p>
+                                Total Pendapatan:
+                                <strong>
+                                    Rp 11.000.000
+                                </strong>
+                            </p>
+
+                            <p>
+                                Total Pengeluaran:
+                                <strong>
+                                    Rp 6.500.000
+                                </strong>
+                            </p>
+
+                            <p>
+                                Sisa Pendapatan:
+                                <strong>
+                                    Rp 4.500.000
+                                </strong>
+                            </p>
+
+                            <p>
+                                Dana Sekolah:
+                                <strong id="reportSchoolText">
+                                    Rp 7.000.000
+                                </strong>
+                            </p>
+
+                            <p>
+                                Dana Darurat:
+                                <strong id="reportEmergencyText">
+                                    Rp 4.000.000
+                                </strong>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   KONFIGURASI
+========================================================= */
+
+const DEMO_USERNAME = "Rezha Angga";
+const DEMO_PASSWORD = "Dira&cila";
+
+const SCHOOL_INITIAL_BALANCE = 10000000;
+const EMERGENCY_TARGET = 50000000;
+const OPERATIONAL_INITIAL_BALANCE = 25000000;
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+function formatRupiah(value) {
+
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        }
+    ).format(Number(value) || 0);
+
+}
+
+
+function today() {
+
+    return new Date()
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+function escapeText(value) {
+
+    return String(value ?? "");
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+const loginPage =
+    document.getElementById("loginPage");
+
+const app =
+    document.getElementById("app");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginError =
+    document.getElementById("loginError");
+
+
+loginForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById("username").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        if (
+            username === DEMO_USERNAME &&
+            password === DEMO_PASSWORD
+        ) {
+
+            sessionStorage.setItem(
+                "pundikuLoggedIn",
+                "true"
+            );
+
+            loginPage.style.display = "none";
+            app.style.display = "block";
+
+        } else {
+
+            loginError.textContent =
+                "Username atau password salah.";
+
+        }
+
+    }
+);
+
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            sessionStorage.removeItem(
+                "pundikuLoggedIn"
+            );
+
+            app.style.display = "none";
+            loginPage.style.display = "flex";
+
+            loginForm.reset();
+
+        }
+    );
+
+
+if (
+    sessionStorage.getItem("pundikuLoggedIn") === "true"
+) {
+
+    loginPage.style.display = "none";
+    app.style.display = "block";
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const pageTitles = {
+
+    dashboard: "Dashboard",
+
+    transaksi: "Transaksi",
+
+    "dana-operasional":
+        "Dana Operasional",
+
+    "dana-sekolah":
+        "Dana Sekolah",
+
+    "dana-darurat":
+        "Dana Darurat",
+
+    aset:
+        "Aset",
+
+    investasi:
+        "Investasi",
+
+    laporan:
+        "Laporan"
+
+};
+
+
+function showPage(pageId) {
+
+    document
+        .querySelectorAll(".page-section")
+        .forEach(
+            page => {
+
+                page.classList.remove("active");
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(
+            button => {
+
+                button.classList.remove("active");
+
+            }
+        );
+
+
+    const page =
+        document.getElementById(pageId);
+
+    if (page) {
+
+        page.classList.add("active");
+
+    }
+
+
+    const navButton =
+        document.querySelector(
+            `.nav-btn[data-page="${pageId}"]`
+        );
+
+    if (navButton) {
+
+        navButton.classList.add("active");
+
+    }
+
+
+    document.getElementById(
+        "topbarTitle"
+    ).textContent =
+        pageTitles[pageId] || "PUNDIKU";
+
+}
+
+
+document
+    .querySelectorAll(".nav-btn[data-page]")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    showPage(
+                        button.dataset.page
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   TRANSAKSI
+========================================================= */
+
+let transactions =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuTransactions"
+        ) || "[]"
+    );
+
+
+function renderTransactions() {
+
+    const tbody =
+        document.getElementById(
+            "transactionTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    if (transactions.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    Belum ada transaksi.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    transactions.forEach(
+        (item, index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+                <td>${escapeText(item.date)}</td>
+                <td>${escapeText(item.description)}</td>
+                <td>${escapeText(item.category)}</td>
+                <td>
+                    <span class="badge ${
+                        item.type === "income"
+                            ? "badge-income"
+                            : "badge-expense"
+                    }">
+                        ${
+                            item.type === "income"
+                                ? "Pemasukan"
+                                : "Pengeluaran"
+                        }
+                    </span>
+                </td>
+                <td>${formatRupiah(item.amount)}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button
+                            class="btn-small btn-danger"
+                            onclick="deleteTransaction(${index})"
+                        >
+                            Hapus
+                        </button>
+                    </div>
+                </td>
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+function deleteTransaction(index) {
+
+    if (
+        !confirm(
+            "Hapus transaksi ini?"
+        )
+    ) return;
+
+
+    transactions.splice(index, 1);
+
+    localStorage.setItem(
+        "pundikuTransactions",
+        JSON.stringify(transactions)
+    );
+
+    renderTransactions();
+
+}
+
+
+document
+    .getElementById("transactionForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const item = {
+
+                id: Date.now(),
+
+                date:
+                    document.getElementById(
+                        "transactionDate"
+                    ).value,
+
+                type:
+                    document.getElementById(
+                        "transactionType"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "transactionDescription"
+                    ).value,
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "transactionAmount"
+                        ).value
+                    ),
+
+                category:
+                    document.getElementById(
+                        "transactionCategory"
+                    ).value
+
+            };
+
+
+            transactions.unshift(item);
+
+
+            localStorage.setItem(
+                "pundikuTransactions",
+                JSON.stringify(transactions)
+            );
+
+
+            this.reset();
+
+            document.getElementById(
+                "transactionDate"
+            ).value = today();
+
+
+            renderTransactions();
+
+        }
+    );
+
+
+/* =========================================================
+   DANA OPERASIONAL
+========================================================= */
+
+let operationalFunds =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuOperationalFunds"
+        ) || "null"
+    );
+
+
+if (!operationalFunds) {
+
+    operationalFunds = [
+
+        {
+            id: 1,
+            date: "2026-09-05",
+            type: "expense",
+            description: "Belanja kebutuhan rumah",
+            category: "Kebutuhan Rumah",
+            amount: 750000
+        },
+
+        {
+            id: 2,
+            date: "2026-09-07",
+            type: "expense",
+            description: "Belanja bulanan",
+            category: "Makanan",
+            amount: 1250000
+        },
+
+        {
+            id: 3,
+            date: "2026-09-09",
+            type: "expense",
+            description: "Perawatan kendaraan",
+            category: "Transportasi",
+            amount: 2000000
+        }
+
+    ];
+
+    localStorage.setItem(
+        "pundikuOperationalFunds",
+        JSON.stringify(operationalFunds)
+    );
+
+}
+
+
+function renderOperational() {
+
+    const tbody =
+        document.getElementById(
+            "operationalTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    let income = 0;
+    let expense = 0;
+
+
+    operationalFunds.forEach(
+        item => {
+
+            if (item.type === "income") {
+
+                income += Number(item.amount);
+
+            } else {
+
+                expense += Number(item.amount);
+
+            }
+
+        }
+    );
+
+
+    const balance =
+        OPERATIONAL_INITIAL_BALANCE +
+        income -
+        expense;
+
+
+    document.getElementById(
+        "operationalInitial"
+    ).textContent =
+        formatRupiah(
+            OPERATIONAL_INITIAL_BALANCE
+        );
+
+
+    document.getElementById(
+        "operationalIncome"
+    ).textContent =
+        formatRupiah(income);
+
+
+    document.getElementById(
+        "operationalExpense"
+    ).textContent =
+        formatRupiah(expense);
+
+
+    document.getElementById(
+        "operationalBalance"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    if (operationalFunds.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    Belum ada data dana operasional.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    operationalFunds.forEach(
+        (item, index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+                <td>${escapeText(item.date)}</td>
+
+                <td>${escapeText(item.description)}</td>
+
+                <td>${escapeText(item.category)}</td>
+
+                <td>
+                    <span class="badge ${
+                        item.type === "income"
+                            ? "badge-income"
+                            : "badge-expense"
+                    }">
+                        ${
+                            item.type === "income"
+                                ? "Dana Masuk"
+                                : "Pengeluaran"
+                        }
+                    </span>
+                </td>
+
+                <td>
+                    ${formatRupiah(item.amount)}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn-small btn-danger"
+                        onclick="deleteOperational(${index})"
+                    >
+                        Hapus
+                    </button>
+
+                </td>
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+function deleteOperational(index) {
+
+    if (
+        !confirm(
+            "Hapus data operasional ini?"
+        )
+    ) return;
+
+
+    operationalFunds.splice(index, 1);
+
+
+    localStorage.setItem(
+        "pundikuOperationalFunds",
+        JSON.stringify(operationalFunds)
+    );
+
+
+    renderOperational();
+
+}
+
+
+document
+    .getElementById("operationalForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const item = {
+
+                id: Date.now(),
+
+                date:
+                    document.getElementById(
+                        "operationalDate"
+                    ).value,
+
+                type:
+                    document.getElementById(
+                        "operationalType"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "operationalDescription"
+                    ).value,
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "operationalAmount"
+                        ).value
+                    ),
+
+                category:
+                    document.getElementById(
+                        "operationalCategory"
+                    ).value
+
+            };
+
+
+            operationalFunds.unshift(item);
+
+
+            localStorage.setItem(
+                "pundikuOperationalFunds",
+                JSON.stringify(operationalFunds)
+            );
+
+
+            this.reset();
+
+
+            document.getElementById(
+                "operationalDate"
+            ).value = today();
+
+
+            renderOperational();
+
+        }
+    );
+
+
+/* =========================================================
+   DANA SEKOLAH
+========================================================= */
+
+let schoolFunds =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuSchoolFunds"
+        ) || "null"
+    );
+
+
+if (!schoolFunds) {
+
+    schoolFunds = [
+
+        {
+            id: 1,
+            date: "2026-09-02",
+            type: "expense",
+            description: "Pembayaran SPP",
+            category: "SPP",
+            status: "Sudah Dibayar",
+            amount: 1500000
+        },
+
+        {
+            id: 2,
+            date: "2026-09-04",
+            type: "expense",
+            description: "Buku pelajaran",
+            category: "Buku Pelajaran",
+            status: "Selesai",
+            amount: 500000
+        },
+
+        {
+            id: 3,
+            date: "2026-09-06",
+            type: "expense",
+            description: "Seragam sekolah",
+            category: "Seragam",
+            status: "Selesai",
+            amount: 1000000
+        }
+
+    ];
+
+
+    localStorage.setItem(
+        "pundikuSchoolFunds",
+        JSON.stringify(schoolFunds)
+    );
+
+}
+
+
+let schoolEditIndex = null;
+
+
+function renderSchoolFunds() {
+
+    const tbody =
+        document.getElementById(
+            "schoolTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    let income = 0;
+    let expense = 0;
+
+
+    schoolFunds.forEach(
+        item => {
+
+            if (item.type === "income") {
+
+                income += Number(item.amount);
+
+            } else {
+
+                expense += Number(item.amount);
+
+            }
+
+        }
+    );
+
+
+    const balance =
+        SCHOOL_INITIAL_BALANCE +
+        income -
+        expense;
+
+
+    document.getElementById(
+        "schoolInitial"
+    ).textContent =
+        formatRupiah(
+            SCHOOL_INITIAL_BALANCE
+        );
+
+
+    document.getElementById(
+        "schoolIncome"
+    ).textContent =
+        formatRupiah(income);
+
+
+    document.getElementById(
+        "schoolExpense"
+    ).textContent =
+        formatRupiah(expense);
+
+
+    document.getElementById(
+        "schoolBalance"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    document.getElementById(
+        "reportSchool"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    document.getElementById(
+        "reportSchoolText"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    if (schoolFunds.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    Belum ada data dana sekolah.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    schoolFunds.forEach(
+        (item, index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeText(item.date)}
+                </td>
+
+                <td>
+                    ${escapeText(item.description)}
+                </td>
+
+                <td>
+                    ${escapeText(item.category)}
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        item.type === "income"
+                            ? "badge-income"
+                            : "badge-expense"
+                    }">
+
+                        ${
+                            item.type === "income"
+                                ? "Dana Masuk"
+                                : "Pengeluaran"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="badge badge-info">
+
+                        ${escapeText(item.status)}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    ${formatRupiah(item.amount)}
+
+                </td>
+
+                <td>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="btn-small btn-warning"
+                            onclick="editSchool(${index})"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="btn-small btn-danger"
+                            onclick="deleteSchool(${index})"
+                        >
+                            Hapus
+                        </button>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+function editSchool(index) {
+
+    const item =
+        schoolFunds[index];
+
+
+    schoolEditIndex = index;
+
+
+    document.getElementById(
+        "schoolDate"
+    ).value =
+        item.date;
+
+
+    document.getElementById(
+        "schoolType"
+    ).value =
+        item.type;
+
+
+    document.getElementById(
+        "schoolDescription"
+    ).value =
+        item.description;
+
+
+    document.getElementById(
+        "schoolAmount"
+    ).value =
+        item.amount;
+
+
+    document.getElementById(
+        "schoolCategory"
+    ).value =
+        item.category;
+
+
+    document.getElementById(
+        "schoolStatus"
+    ).value =
+        item.status;
+
+
+    document.getElementById(
+        "schoolCancelEdit"
+    ).style.display =
+        "inline-block";
+
+
+    document
+        .getElementById("schoolDescription")
+        .focus();
+
+}
+
+
+function deleteSchool(index) {
+
+    if (
+        !confirm(
+            "Hapus data dana sekolah ini?"
+        )
+    ) return;
+
+
+    schoolFunds.splice(index, 1);
+
+
+    localStorage.setItem(
+        "pundikuSchoolFunds",
+        JSON.stringify(schoolFunds)
+    );
+
+
+    renderSchoolFunds();
+
+}
+
+
+document
+    .getElementById("schoolForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const item = {
+
+                id:
+                    schoolEditIndex !== null
+                        ? schoolFunds[schoolEditIndex].id
+                        : Date.now(),
+
+                date:
+                    document.getElementById(
+                        "schoolDate"
+                    ).value,
+
+                type:
+                    document.getElementById(
+                        "schoolType"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "schoolDescription"
+                    ).value,
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "schoolAmount"
+                        ).value
+                    ),
+
+                category:
+                    document.getElementById(
+                        "schoolCategory"
+                    ).value,
+
+                status:
+                    document.getElementById(
+                        "schoolStatus"
+                    ).value
+
+            };
+
+
+            if (
+                schoolEditIndex !== null
+            ) {
+
+                schoolFunds[
+                    schoolEditIndex
+                ] = item;
+
+            } else {
+
+                schoolFunds.unshift(item);
+
+            }
+
+
+            localStorage.setItem(
+                "pundikuSchoolFunds",
+                JSON.stringify(schoolFunds)
+            );
+
+
+            this.reset();
+
+
+            document.getElementById(
+                "schoolDate"
+            ).value = today();
+
+
+            schoolEditIndex = null;
+
+
+            document.getElementById(
+                "schoolCancelEdit"
+            ).style.display =
+                "none";
+
+
+            renderSchoolFunds();
+
+        }
+    );
+
+
+document
+    .getElementById("schoolCancelEdit")
+    .addEventListener(
+        "click",
+        function() {
+
+            schoolEditIndex = null;
+
+            document
+                .getElementById("schoolForm")
+                .reset();
+
+            document.getElementById(
+                "schoolDate"
+            ).value = today();
+
+            this.style.display =
+                "none";
+
+        }
+    );
+
+
+/* =========================================================
+   DANA DARURAT
+========================================================= */
+
+let emergencyFunds =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuEmergencyFunds"
+        ) || "null"
+    );
+
+
+if (!emergencyFunds) {
+
+    emergencyFunds = [
+
+        {
+            id: 1,
+            date: "2026-09-01",
+            type: "income",
+            description: "Setoran awal dana darurat",
+            category: "Setoran Dana Darurat",
+            status: "Berhasil",
+            amount: 5000000
+        },
+
+        {
+            id: 2,
+            date: "2026-09-08",
+            type: "expense",
+            description: "Biaya kesehatan",
+            category: "Kesehatan",
+            status: "Berhasil",
+            amount: 1000000
+        }
+
+    ];
+
+
+    localStorage.setItem(
+        "pundikuEmergencyFunds",
+        JSON.stringify(emergencyFunds)
+    );
+
+}
+
+
+let emergencyEditIndex = null;
+
+
+function renderEmergencyFunds() {
+
+    const tbody =
+        document.getElementById(
+            "emergencyTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    let income = 0;
+    let expense = 0;
+
+
+    emergencyFunds.forEach(
+        item => {
+
+            if (item.type === "income") {
+
+                income += Number(item.amount);
+
+            } else {
+
+                expense += Number(item.amount);
+
+            }
+
+        }
+    );
+
+
+    const balance =
+        income - expense;
+
+
+    const remaining =
+        Math.max(
+            EMERGENCY_TARGET - balance,
+            0
+        );
+
+
+    const progress =
+        Math.min(
+            (balance /
+                EMERGENCY_TARGET) *
+                100,
+            100
+        );
+
+
+    document.getElementById(
+        "emergencyTarget"
+    ).textContent =
+        formatRupiah(
+            EMERGENCY_TARGET
+        );
+
+
+    document.getElementById(
+        "emergencyBalance"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    document.getElementById(
+        "emergencyExpense"
+    ).textContent =
+        formatRupiah(expense);
+
+
+    document.getElementById(
+        "emergencyRemaining"
+    ).textContent =
+        formatRupiah(remaining);
+
+
+    document.getElementById(
+        "emergencyProgressText"
+    ).textContent =
+        progress.toFixed(1) + "%";
+
+
+    document.getElementById(
+        "emergencyProgressBar"
+    ).style.width =
+        progress + "%";
+
+
+    document.getElementById(
+        "reportEmergency"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    document.getElementById(
+        "reportEmergencyText"
+    ).textContent =
+        formatRupiah(balance);
+
+
+    if (emergencyFunds.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    Belum ada data dana darurat.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    emergencyFunds.forEach(
+        (item, index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeText(item.date)}
+                </td>
+
+                <td>
+                    ${escapeText(item.description)}
+                </td>
+
+                <td>
+                    ${escapeText(item.category)}
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        item.type === "income"
+                            ? "badge-income"
+                            : "badge-expense"
+                    }">
+
+                        ${
+                            item.type === "income"
+                                ? "Setoran"
+                                : "Penggunaan"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="badge badge-info">
+
+                        ${escapeText(item.status)}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    ${formatRupiah(item.amount)}
+
+                </td>
+
+                <td>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="btn-small btn-warning"
+                            onclick="editEmergency(${index})"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="btn-small btn-danger"
+                            onclick="deleteEmergency(${index})"
+                        >
+                            Hapus
+                        </button>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+function editEmergency(index) {
+
+    const item =
+        emergencyFunds[index];
+
+
+    emergencyEditIndex = index;
+
+
+    document.getElementById(
+        "emergencyDate"
+    ).value =
+        item.date;
+
+
+    document.getElementById(
+        "emergencyType"
+    ).value =
+        item.type;
+
+
+    document.getElementById(
+        "emergencyDescription"
+    ).value =
+        item.description;
+
+
+    document.getElementById(
+        "emergencyAmount"
+    ).value =
+        item.amount;
+
+
+    document.getElementById(
+        "emergencyCategory"
+    ).value =
+        item.category;
+
+
+    document.getElementById(
+        "emergencyStatus"
+    ).value =
+        item.status;
+
+
+    document.getElementById(
+        "emergencyCancelEdit"
+    ).style.display =
+        "inline-block";
+
+
+    document
+        .getElementById("emergencyDescription")
+        .focus();
+
+}
+
+
+function deleteEmergency(index) {
+
+    if (
+        !confirm(
+            "Hapus data dana darurat ini?"
+        )
+    ) return;
+
+
+    emergencyFunds.splice(
+        index,
+        1
+    );
+
+
+    localStorage.setItem(
+        "pundikuEmergencyFunds",
+        JSON.stringify(emergencyFunds)
+    );
+
+
+    renderEmergencyFunds();
+
+}
+
+
+document
+    .getElementById("emergencyForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const item = {
+
+                id:
+                    emergencyEditIndex !== null
+                        ? emergencyFunds[
+                            emergencyEditIndex
+                        ].id
+                        : Date.now(),
+
+                date:
+                    document.getElementById(
+                        "emergencyDate"
+                    ).value,
+
+                type:
+                    document.getElementById(
+                        "emergencyType"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "emergencyDescription"
+                    ).value,
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "emergencyAmount"
+                        ).value
+                    ),
+
+                category:
+                    document.getElementById(
+                        "emergencyCategory"
+                    ).value,
+
+                status:
+                    document.getElementById(
+                        "emergencyStatus"
+                    ).value
+
+            };
+
+
+            if (
+                emergencyEditIndex !== null
+            ) {
+
+                emergencyFunds[
+                    emergencyEditIndex
+                ] = item;
+
+            } else {
+
+                emergencyFunds.unshift(item);
+
+            }
+
+
+            localStorage.setItem(
+                "pundikuEmergencyFunds",
+                JSON.stringify(emergencyFunds)
+            );
+
+
+            this.reset();
+
+
+            document.getElementById(
+                "emergencyDate"
+            ).value = today();
+
+
+            emergencyEditIndex = null;
+
+
+            document.getElementById(
+                "emergencyCancelEdit"
+            ).style.display =
+                "none";
+
+
+            renderEmergencyFunds();
+
+        }
+    );
+
+
+document
+    .getElementById("emergencyCancelEdit")
+    .addEventListener(
+        "click",
+        function() {
+
+            emergencyEditIndex = null;
+
+            document
+                .getElementById("emergencyForm")
+                .reset();
+
+            document.getElementById(
+                "emergencyDate"
+            ).value = today();
+
+            this.style.display =
+                "none";
+
+        }
+    );
+
+
+/* =========================================================
+   ASET
+========================================================= */
+
+let assets =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuAssets"
+        ) || "null"
+    );
+
+
+if (!assets) {
+
+    assets = [
+
+        {
+            id: 1,
+            name: "Rumah",
+            category: "Properti",
+            value: 100000000
+        },
+
+        {
+            id: 2,
+            name: "Kendaraan",
+            category: "Kendaraan",
+            value: 35000000
+        },
+
+        {
+            id: 3,
+            name: "Tabungan",
+            category: "Tabungan",
+            value: 15000000
+        }
+
+    ];
+
+
+    localStorage.setItem(
+        "pundikuAssets",
+        JSON.stringify(assets)
+    );
+
+}
+
+
+function renderAssets() {
+
+    const tbody =
+        document.getElementById(
+            "assetTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    assets.forEach(
+        (asset, index) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeText(asset.name)}
+                </td>
+
+                <td>
+                    ${escapeText(asset.category)}
+                </td>
+
+                <td>
+                    ${formatRupiah(asset.value)}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn-small btn-danger"
+                        onclick="deleteAsset(${index})"
+                    >
+                        Hapus
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+
+    if (assets.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="empty">
+                    Belum ada aset.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+function deleteAsset(index) {
+
+    if (
+        !confirm(
+            "Hapus aset ini?"
+        )
+    ) return;
+
+
+    assets.splice(index, 1);
+
+
+    localStorage.setItem(
+        "pundikuAssets",
+        JSON.stringify(assets)
+    );
+
+
+    renderAssets();
+
+}
+
+
+document
+    .getElementById("assetForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const asset = {
+
+                id: Date.now(),
+
+                name:
+                    document.getElementById(
+                        "assetName"
+                    ).value,
+
+                category:
+                    document.getElementById(
+                        "assetCategory"
+                    ).value,
+
+                value:
+                    Number(
+                        document.getElementById(
+                            "assetValue"
+                        ).value
+                    )
+
+            };
+
+
+            assets.push(asset);
+
+
+            localStorage.setItem(
+                "pundikuAssets",
+                JSON.stringify(assets)
+            );
+
+
+            this.reset();
+
+
+            renderAssets();
+
+        }
+    );
+
+
+/* =========================================================
+   INVESTASI
+========================================================= */
+
+let investments =
+    JSON.parse(
+        localStorage.getItem(
+            "pundikuInvestments"
+        ) || "null"
+    );
+
+
+if (!investments) {
+
+    investments = [
+
+        {
+            id: 1,
+            name: "Reksa Dana",
+            capital: 10000000,
+            profitPercent: 10
+        },
+
+        {
+            id: 2,
+            name: "Emas",
+            capital: 15000000,
+            profitPercent: 10
+        },
+
+        {
+            id: 3,
+            name: "Deposito",
+            capital: 10000000,
+            profitPercent: 3
+        }
+
+    ];
+
+
+    localStorage.setItem(
+        "pundikuInvestments",
+        JSON.stringify(investments)
+    );
+
+}
+
+
+function renderInvestments() {
+
+    const tbody =
+        document.getElementById(
+            "investmentTableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    investments.forEach(
+        (investment, index) => {
+
+            const estimatedValue =
+                investment.capital *
+                (
+                    1 +
+                    investment.profitPercent /
+                    100
+                );
+
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeText(investment.name)}
+                </td>
+
+                <td>
+                    ${formatRupiah(
+                        investment.capital
+                    )}
+                </td>
+
+                <td>
+                    ${investment.profitPercent}%
+                </td>
+
+                <td>
+                    ${formatRupiah(
+                        estimatedValue
+                    )}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn-small btn-danger"
+                        onclick="deleteInvestment(${index})"
+                    >
+                        Hapus
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+
+    if (investments.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Belum ada investasi.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+function deleteInvestment(index) {
+
+    if (
+        !confirm(
+            "Hapus investasi ini?"
+        )
+    ) return;
+
+
+    investments.splice(
+        index,
+        1
+    );
+
+
+    localStorage.setItem(
+        "pundikuInvestments",
+        JSON.stringify(investments)
+    );
+
+
+    renderInvestments();
+
+}
+
+
+document
+    .getElementById("investmentForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const investment = {
+
+                id: Date.now(),
+
+                name:
+                    document.getElementById(
+                        "investmentName"
+                    ).value,
+
+                capital:
+                    Number(
+                        document.getElementById(
+                            "investmentCapital"
+                        ).value
+                    ),
+
+                profitPercent:
+                    Number(
+                        document.getElementById(
+                            "investmentProfit"
+                        ).value
+                    )
+
+            };
+
+
+            investments.push(
+                investment
+            );
+
+
+            localStorage.setItem(
+                "pundikuInvestments",
+                JSON.stringify(investments)
+            );
+
+
+            this.reset();
+
+
+            renderInvestments();
+
+        }
+    );
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.getElementById(
+    "transactionDate"
+).value = today();
+
+
+document.getElementById(
+    "operationalDate"
+).value = today();
+
+
+document.getElementById(
+    "schoolDate"
+).value = today();
+
+
+document.getElementById(
+    "emergencyDate"
+).value = today();
+
+
+renderTransactions();
+
+renderOperational();
+
+renderSchoolFunds();
+
+renderEmergencyFunds();
+
+renderAssets();
+
+renderInvestments();
+
+
+/* =========================================================
+   PRINT STYLE
+========================================================= */
+
+const printStyle =
+    document.createElement("style");
+
+
+printStyle.textContent = `
+
+@media print {
+
+    .sidebar,
+    .topbar,
+    .btn,
+    button,
+    form {
+        display: none !important;
+    }
+
+    .main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .content {
+        padding: 0 !important;
+    }
+
+    .panel {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+}
+
+`;
+
+
+document.head.appendChild(
+    printStyle
+);
+
+</script>
+
+</body>
+</html>
